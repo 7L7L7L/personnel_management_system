@@ -19,7 +19,10 @@ public enum ResultEnum  {
     UNKNOWN_ERROR(500, "未知错误"),
     FILENAME_IS_EMPTY(1000,"文件名为空"),
     FILE_CREATION_FAILED(1100,"文件创建失败"),
-    FILE_DELETE_FAILED(1200,"照片删除失败")
+    FILE_DELETE_FAILED(1200,"照片删除失败"),
+    PASSWORD_LENGTH_IS_LESS_THEN_SIX(400,"密码长度小于6"),
+    PASSWORD_IS_SAME(600,"密码与上次一致"),
+
 
     ;
 

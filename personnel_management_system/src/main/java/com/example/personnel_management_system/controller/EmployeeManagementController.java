@@ -31,7 +31,7 @@ public class EmployeeManagementController {
 
     @PostMapping("/addOne")
     public ResultVo<Object> addOne(EmployeeManagementBo employeeManagementBo){
-        System.out.println(employeeManagementBo);
+//        System.out.println(employeeManagementBo);
 
         try {
             return  employeeManagementService.addEmployee(employeeManagementBo);
@@ -44,8 +44,9 @@ public class EmployeeManagementController {
         }
     }
     @GetMapping("/getList")
-    public List<EmployeeManagement> getList(){
-        return employeeManagementService.getEmployees();
+    public ResultVo<Object> getList(){
+
+        return ResultUtil.success(employeeManagementService.getEmployees());
     }
     @PostMapping("/deleteEmployee")
     public ResultVo<Object> deleteEmployee(EmployeeManagementBo employeeManagementBo){

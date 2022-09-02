@@ -9,7 +9,7 @@ import com.example.personnel_management_system.pojo.vo.ResultVo;
  */
 public interface UserService extends IService<User> {
 
-    String login(User user);
+    ResultVo<Object> login(User user);
 
     ResultVo<Object> register(User user);
 

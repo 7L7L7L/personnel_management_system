@@ -1,6 +1,6 @@
 package com.example.personnel_management_system.service.impl;
 
-import cn.hutool.core.io.FileUtil;
+
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -14,10 +14,7 @@ import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.EmployeeManagementService;
 import com.example.personnel_management_system.util.FileUtils;
 import com.example.personnel_management_system.util.ResultUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -74,7 +71,7 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",employeeManagementBo.getId());
         EmployeeManagement one = getOne(queryWrapper);
-        System.out.println(one);
+
         one.setEmployeeName(employeeManagementBo.getEmployeeName());
         one.setEmployeeSex(employeeManagementBo.getEmployeeSex());
         one.setEmployeeTelephone(employeeManagementBo.getEmployeeTelephone());
