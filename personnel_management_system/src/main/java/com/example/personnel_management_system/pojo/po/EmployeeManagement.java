@@ -41,5 +41,5 @@ public class EmployeeManagement extends BaseEntity<EmployeeManagement> {
      */
     private String employeeImageAddress;
 
-
+    private String departmentName;
 }

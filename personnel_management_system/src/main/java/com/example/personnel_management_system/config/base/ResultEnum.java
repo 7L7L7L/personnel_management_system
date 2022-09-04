@@ -22,6 +22,7 @@ public enum ResultEnum  {
     FILE_DELETE_FAILED(1200,"照片删除失败"),
     PASSWORD_LENGTH_IS_LESS_THEN_SIX(400,"密码长度小于6"),
     PASSWORD_IS_SAME(600,"密码与上次一致"),
+    DEPARTMENT_IS_EXIST(700,"部门已存在")
 
 
     ;

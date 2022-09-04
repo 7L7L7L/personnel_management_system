@@ -37,6 +37,7 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         employee.setEmployeeSex(employeeManagementBo.getEmployeeSex());
         employee.setEmployeeTelephone(employeeManagementBo.getEmployeeTelephone());
         employee.setEmployeeAddress(employeeManagementBo.getEmployeeAddress());
+        employee.setDepartmentName(employeeManagementBo.getDepartmentName());
 
 
         if (ObjectUtil.isNotNull(employeeManagementBo.getImage())){
@@ -71,7 +72,7 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",employeeManagementBo.getId());
         EmployeeManagement one = getOne(queryWrapper);
-
+        one.setDepartmentName(employeeManagementBo.getDepartmentName());
         one.setEmployeeName(employeeManagementBo.getEmployeeName());
         one.setEmployeeSex(employeeManagementBo.getEmployeeSex());
         one.setEmployeeTelephone(employeeManagementBo.getEmployeeTelephone());
