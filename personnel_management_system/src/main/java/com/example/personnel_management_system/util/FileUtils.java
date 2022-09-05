@@ -48,7 +48,32 @@ public class FileUtils {
         }
         return filepath;
     }
+    public static String getUuidAndName(String filepath){
 
+        String[] split = filepath.split("\\\\");
+        StringBuffer stringBuffer = new StringBuffer();
+        String fileName=split[split.length-1];
+        for (int i = 0; i < split.length-1; i++) {
+            String s=split[i];
+            if (s.equals("D:")){
+                continue;
+            }else if (s.equals("home")){
+                continue;
+            }else if (s.equals("uploadFile")){
+                continue;
+            }else if (s.equals(" ")){
+                continue;
+            }
+            stringBuffer.append(s);
+        }
+        stringBuffer.append("/").append(fileName);
+
+
+        return stringBuffer.toString();
+    }
+    public static String getFullFilePath(String fileName){
+        return path+File.separator+fileName;
+    }
 
 
 }

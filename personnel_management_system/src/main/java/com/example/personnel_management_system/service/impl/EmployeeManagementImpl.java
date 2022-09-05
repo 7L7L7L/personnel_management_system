@@ -38,18 +38,18 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         employee.setEmployeeTelephone(employeeManagementBo.getEmployeeTelephone());
         employee.setEmployeeAddress(employeeManagementBo.getEmployeeAddress());
         employee.setDepartmentName(employeeManagementBo.getDepartmentName());
+        employee.setEmployeeImageAddress(employeeManagementBo.getEmployeeImageAddress());
 
-
-        if (ObjectUtil.isNotNull(employeeManagementBo.getImage())){
-            if (StrUtil.isEmpty( employeeManagementBo.getFileName())){
-                return ResultUtil.error(ResultEnum.FILENAME_IS_EMPTY);
-            }
-            String fileName = employeeManagementBo.getFileName();
-            MultipartFile multipartFile = employeeManagementBo.getImage();
-            String filepath = FileUtils.getFilepath(fileName);
-             createFile(filepath,multipartFile);
-            employee.setEmployeeImageAddress(filepath);
-        }
+//        if (ObjectUtil.isNotNull(employeeManagementBo.getImage())){
+//            if (StrUtil.isEmpty( employeeManagementBo.getFileName())){
+//                return ResultUtil.error(ResultEnum.FILENAME_IS_EMPTY);
+//            }
+//            String fileName = employeeManagementBo.getFileName();
+//            MultipartFile multipartFile = employeeManagementBo.getImage();
+//            String filepath = FileUtils.getFilepath(fileName);
+//             createFile(filepath,multipartFile);
+//            employee.setEmployeeImageAddress(FileUtils.getUuidAndName(filepath));
+//        }
 
         boolean b = save(employee);
         if (b){
@@ -77,28 +77,8 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         one.setEmployeeSex(employeeManagementBo.getEmployeeSex());
         one.setEmployeeTelephone(employeeManagementBo.getEmployeeTelephone());
         one.setEmployeeAddress(employeeManagementBo.getEmployeeAddress());
-        if (ObjectUtil.isNotNull(employeeManagementBo.getImage())){
-            String fileName = employeeManagementBo.getFileName();
-            if (StrUtil.isEmpty(fileName)){
-                return ResultUtil.error(ResultEnum.FILENAME_IS_EMPTY);
-            }
-            MultipartFile multipartFile = employeeManagementBo.getImage();
-            String filepath =one.getEmployeeImageAddress();
-            File file = new File(filepath);
-            String newFilepath=FileUtils.getPathWithOutName(one.getEmployeeImageAddress())+File.separator+fileName;
-            boolean delete = file.delete();
-            if (delete){
-                boolean b = createFile(newFilepath, multipartFile);
-                if (b){
-                    one.setEmployeeImageAddress(newFilepath);
-                }else {
-                    return ResultUtil.error(ResultEnum.FILE_CREATION_FAILED);
-                }
+        one.setEmployeeImageAddress(employeeManagementBo.getEmployeeImageAddress());
 
-            }else {
-                return ResultUtil.error(ResultEnum.FILE_DELETE_FAILED);
-            }
-        }
         boolean b = updateById(one);
         if (b){
             return ResultUtil.success();
@@ -107,12 +87,8 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
     }
 
     @Override
-    public List<EmployeeManagement> getEmployees() {
-
-        return list();
-    }
-    public static boolean createFile(String filepath,MultipartFile multipartFile) throws IOException {
-
+    public ResultVo<Object> upload(MultipartFile multipartFile) throws MyException {
+        String filepath = FileUtils.getFilepath(multipartFile.getOriginalFilename());
         File file=new File(filepath);
         if (!file.exists()){
             file.mkdirs();
@@ -124,6 +100,14 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
             throw new MyException(ResultEnum.FILE_CREATION_FAILED);
 
         }
-        return true;
+
+        return ResultUtil.success(FileUtils.getUuidAndName(filepath));
     }
+
+    @Override
+    public List<EmployeeManagement> getEmployees() {
+
+        return list();
+    }
+
 }
