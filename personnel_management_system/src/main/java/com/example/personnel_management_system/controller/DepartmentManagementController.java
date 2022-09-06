@@ -1,11 +1,14 @@
 package com.example.personnel_management_system.controller;
 
+import com.example.personnel_management_system.config.myException.MyException;
+import com.example.personnel_management_system.pojo.bo.DepartmentManagementBo;
+import com.example.personnel_management_system.pojo.bo.EmployeeManagementBo;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.DepartmentManagementService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.personnel_management_system.util.ResultUtil;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/departmentManagement")
@@ -16,8 +19,28 @@ public class DepartmentManagementController {
         this.departmentManagementService = departmentManagementService;
     }
 
-    @GetMapping("/get/{id}")
-    public ResultVo<Object> getAllEmployeeManagement(@PathVariable Long id){
-        return departmentManagementService.getAllEmployeeManagement(id);
+    @GetMapping("/getAllEmployeeManagement/{departmentName}")
+    public ResultVo<Object> getAllEmployeeManagement(@PathVariable("departmentName") String departmentName){
+        return departmentManagementService.getAllEmployeeManagement(departmentName);
+    }
+    @GetMapping("/getList")
+    public ResultVo<Object> getList(){
+        return departmentManagementService.getList();
+    }
+    @PostMapping("/addOne")
+    public ResultVo<Object> addOne(DepartmentManagementBo departmentManagementBo){
+
+            return  departmentManagementService.addOne(departmentManagementBo);
+
+    }
+    @PostMapping("/deleteOne/{id}")
+    public ResultVo<Object> deleteEmployee(@PathVariable("id") Long id){
+        return departmentManagementService.deleteOne(id);
+    }
+    @PostMapping("/updateOne")
+    public ResultVo<Object> updateEmployee(DepartmentManagementBo departmentManagementBo){
+
+            return departmentManagementService.updateOne(departmentManagementBo);
+
     }
 }

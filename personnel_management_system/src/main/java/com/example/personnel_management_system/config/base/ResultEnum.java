@@ -22,7 +22,11 @@ public enum ResultEnum  {
     FILE_DELETE_FAILED(1200,"照片删除失败"),
     PASSWORD_LENGTH_IS_LESS_THEN_SIX(400,"密码长度小于6"),
     PASSWORD_IS_SAME(600,"密码与上次一致"),
-    DEPARTMENT_IS_EXIST(700,"部门已存在")
+    DEPARTMENT_IS_EXIST(700,"部门已存在"),
+    THE_TOKEN_EXPIRES(2001,"令牌过期"),
+    THE_TOKEN_IS_NOT_LEGITIMATE(2002,"令牌不合法"),
+    INSUFFICIENT_PERMISSIONS(300,"权限不足")
+    ;
 
 
     ;

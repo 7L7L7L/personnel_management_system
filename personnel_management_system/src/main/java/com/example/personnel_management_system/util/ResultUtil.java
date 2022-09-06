@@ -3,6 +3,11 @@ package com.example.personnel_management_system.util;
 import com.example.personnel_management_system.config.base.ResultEnum;
 import com.example.personnel_management_system.config.myException.MyException;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
+import  com.alibaba.fastjson.JSONObject;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @ClassName ResultUtil
@@ -56,5 +61,14 @@ public class ResultUtil {
         resultVo.setMsg(resultEnum.getMsg());
         resultVo.setData(object);
         return resultVo;
+    }
+    public static void sendResponse(HttpServletResponse httpServletResponse, ResultVo<Object> resultVo) throws IOException {
+        httpServletResponse.setContentType("application/json;charset=UTF-8");
+//        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+        ServletOutputStream out = httpServletResponse.getOutputStream();
+        String str = JSONObject.toJSONString(resultVo);
+        out.write(str.getBytes(StandardCharsets.UTF_8));
+        out.flush();
+        out.close();
     }
 }

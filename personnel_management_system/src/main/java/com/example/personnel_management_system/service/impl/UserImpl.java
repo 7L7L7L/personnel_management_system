@@ -8,6 +8,7 @@ import com.example.personnel_management_system.mapper.UserMapper;
 import com.example.personnel_management_system.pojo.po.User;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.UserService;
+import com.example.personnel_management_system.util.JwtUtil;
 import com.example.personnel_management_system.util.ResultUtil;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    private final JwtUtil jwtUtil;
+
+    public UserImpl(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
     @Override
     public ResultVo<Object> login(User user) {
         User user1 = getUser(user);
         if (ObjectUtil.isNotNull(user1)){
-            return ResultUtil.success();
+
+            return ResultUtil.success(jwtUtil.generateJwt(user1.getId(), user1.getUsername()));
 
         }
         return ResultUtil.error(300,"用户名或密码错误");
@@ -56,7 +64,7 @@ public class UserImpl extends ServiceImpl<UserMapper, User> implements UserServi
 
     public User getUser(User user){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username",user.getUsername()).eq("password",user.getPassword());
+        queryWrapper.eq("username",user.getUsername()).eq("password",user.getPassword()).eq("is_admin",user.getIsAdmin());
         User one = getOne(queryWrapper);
         return one;
     }

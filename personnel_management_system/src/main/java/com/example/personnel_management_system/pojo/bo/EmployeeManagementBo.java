@@ -12,10 +12,5 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 @Data
 public class EmployeeManagementBo extends EmployeeManagement {
-    /**
-     * 照片名称
-     */
-    private String fileName;
 
-    private  MultipartFile image;
 }

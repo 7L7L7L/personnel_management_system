@@ -42,3 +42,8 @@ server:
     connection-timeout: 600000
   port: 8081
 
+jwt:
+  header: Jwt
+  webSocketHeader: Sec-WebSocket-Protocol
+  secret: sqdybffsshejbh
+  expiration: 2000000

@@ -44,18 +44,24 @@ public class DepartmentManagementImpl extends ServiceImpl<DepartmentManagementMa
     }
 
     @Override
-    public ResultVo<Object> deleteOne(DepartmentManagementBo departmentManagementBo) {
-        DepartmentManagement one = getOne(new QueryWrapper<DepartmentManagement>().eq("id", departmentManagementBo.getId()));
-
-        return ResultUtil.success(removeById(one));
+    public ResultVo<Object> deleteOne(Long id) {
+        DepartmentManagement one = getOne(new QueryWrapper<DepartmentManagement>().eq("id",id));
+        boolean b = removeById(one);
+        if (b){
+            return ResultUtil.success();
+        }
+        return ResultUtil.error();
     }
 
     @Override
     public ResultVo<Object> updateOne(DepartmentManagementBo departmentManagementBo) {
         DepartmentManagement one = getOne(new QueryWrapper<DepartmentManagement>().eq("id", departmentManagementBo.getId()));
         BeanUtils.copyProperties(departmentManagementBo,one);
-
-        return ResultUtil.success(updateById(one));
+        boolean b = updateById(one);
+        if (b){
+            return ResultUtil.success();
+        }
+        return ResultUtil.error();
     }
 
     @Override
@@ -64,14 +70,14 @@ public class DepartmentManagementImpl extends ServiceImpl<DepartmentManagementMa
     }
 
     @Override
-    public ResultVo<Object> getAllEmployeeManagement(Long id) {
+    public ResultVo<Object> getAllEmployeeManagement(String departmentName) {
         QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("department_name",getDepartmentNameById(id));
+        queryWrapper.eq("department_name",departmentName);
         return ResultUtil.success(employeeManagementMapper.selectList(queryWrapper));
     }
-    public String getDepartmentNameById(Long id){
-        QueryWrapper<DepartmentManagement> queryWrapper = new QueryWrapper<>();
-        return getOne(queryWrapper.eq("id",id)).getDepartmentName();
-
-    }
+//    public String getDepartmentNameById(Long id){
+//        QueryWrapper<DepartmentManagement> queryWrapper = new QueryWrapper<>();
+//        return getOne(queryWrapper.eq("id",id)).getDepartmentName();
+//
+//    }
 }
