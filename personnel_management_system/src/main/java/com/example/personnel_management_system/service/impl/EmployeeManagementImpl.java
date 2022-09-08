@@ -2,6 +2,7 @@ package com.example.personnel_management_system.service.impl;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @ClassName EmployeeManagementImpl
@@ -39,7 +41,10 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         employee.setEmployeeAddress(employeeManagementBo.getEmployeeAddress());
         employee.setDepartmentName(employeeManagementBo.getDepartmentName());
         employee.setEmployeeImageAddress(employeeManagementBo.getEmployeeImageAddress());
+        Long uuid = getUuid();
+        employee.setUuid(uuid);
 
+//        employee.setUuid();
 //        if (ObjectUtil.isNotNull(employeeManagementBo.getImage())){
 //            if (StrUtil.isEmpty( employeeManagementBo.getFileName())){
 //                return ResultUtil.error(ResultEnum.FILENAME_IS_EMPTY);
@@ -53,10 +58,13 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
 
         boolean b = save(employee);
         if (b){
-            return ResultUtil.success();
+            return ResultUtil.success("添加成功,uuid为："+uuid);
         }
         return ResultUtil.error();
     }
+
+
+
 
     @Override
     public ResultVo<Object> deleteEmployee(Long id) {
@@ -108,6 +116,18 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
     public List<EmployeeManagement> getEmployees() {
 
         return list();
+    }
+
+    public  Long getUuid(){
+        Long random= Long.valueOf("1916020"+ RandomUtil.randomLong(999));
+        QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uuid",random);
+        EmployeeManagement one = getOne(queryWrapper);
+        if (ObjectUtil.isNull(one)){
+            return random;
+        }else {
+            return getUuid();
+        }
     }
 
 }

@@ -14,4 +14,8 @@ public interface UserService extends IService<User> {
     ResultVo<Object> register(User user);
 
     ResultVo<Object> updatePassword(User user);
+
+    ResultVo<Object> userBind(Long id,Long uuid);
+
+    ResultVo<Object> getOneById(Long id);
 }

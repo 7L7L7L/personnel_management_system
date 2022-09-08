@@ -1,6 +1,7 @@
 package com.example.personnel_management_system.controller;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.personnel_management_system.config.base.ResultEnum;
 import com.example.personnel_management_system.config.myException.MyException;
 import com.example.personnel_management_system.pojo.bo.EmployeeManagementBo;
@@ -82,5 +83,17 @@ public class EmployeeManagementController {
             e.printStackTrace();
         }
         return ResultUtil.error();
+    }
+    @GetMapping("/getUuid/{id}")
+    public ResultVo<Object> getUuid(@PathVariable Long id){
+        QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",id);
+        EmployeeManagement one = employeeManagementService.getOne(queryWrapper);
+        if (ObjectUtil.isNotNull(one)){
+            return ResultUtil.success(one.getUuid());
+        }
+        else {
+            return ResultUtil.error();
+        }
     }
 }

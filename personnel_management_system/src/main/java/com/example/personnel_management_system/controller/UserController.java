@@ -3,10 +3,7 @@ package com.example.personnel_management_system.controller;
 import com.example.personnel_management_system.pojo.po.User;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.UserService;
-import com.example.personnel_management_system.util.ResultUtil;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName UserController
@@ -33,5 +30,13 @@ public class UserController {
     @PostMapping("/updatePassword")
     public ResultVo<Object> updatePassword(User user){
         return userService.updatePassword(user);
+    }
+    @PostMapping("/userBind/{id}/{uuid}")
+    public ResultVo<Object> userBind(@PathVariable Long id,@PathVariable Long uuid){
+        return userService.userBind(id,uuid);
+    }
+    @GetMapping("/getOneById/{id}")
+    public ResultVo<Object> getOneById(@PathVariable Long id){
+        return userService.getOneById(id);
     }
 }

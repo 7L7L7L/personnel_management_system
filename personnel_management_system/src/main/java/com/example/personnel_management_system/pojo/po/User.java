@@ -21,4 +21,5 @@ public class User extends BaseEntity<User> {
 
     private String password;
     private Integer isAdmin;
+    private Long employeeId;
 }

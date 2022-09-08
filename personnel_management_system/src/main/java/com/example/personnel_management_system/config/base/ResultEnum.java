@@ -25,7 +25,11 @@ public enum ResultEnum  {
     DEPARTMENT_IS_EXIST(700,"部门已存在"),
     THE_TOKEN_EXPIRES(2001,"令牌过期"),
     THE_TOKEN_IS_NOT_LEGITIMATE(2002,"令牌不合法"),
-    INSUFFICIENT_PERMISSIONS(300,"权限不足")
+    INSUFFICIENT_PERMISSIONS(300,"权限不足"),
+    IDENTITY_HAS_EXPIRED(800,"身份已过期，请重新登录！"),
+    USERNAME_IS_EXIST(900,"用户名已存在"),
+    ID_IS_NULL(1300,"id为空"),
+    UUID_IS_ERROR(1500,"uuid错误！请重新输入")
     ;
 
 

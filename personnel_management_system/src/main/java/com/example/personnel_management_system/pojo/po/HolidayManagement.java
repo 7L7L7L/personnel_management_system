@@ -1,8 +1,6 @@
 package com.example.personnel_management_system.pojo.po;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.example.personnel_management_system.config.mybatisplus.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -20,9 +18,11 @@ import java.time.LocalDateTime;
 @TableName("holiday_management")
 public class HolidayManagement extends BaseEntity<HolidayManagement> {
 
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     private Long employeeId;
+    private String leaveReason;
 
     private Integer isAllow;
 

@@ -53,7 +53,7 @@ public class JwtUtil {
     public String generateJwt(Long id,String username) {
         Map<String, Object> map = new HashMap<>();
         map.put("id",id);
-        map.put("username", username);
+//        map.put("username", username);
         JwtBuilder builder = Jwts.builder()
                 .setClaims(map)                      //需要放在第一个，不然这个会覆盖之前所有的设置
                 .setHeaderParam("byt", header)
