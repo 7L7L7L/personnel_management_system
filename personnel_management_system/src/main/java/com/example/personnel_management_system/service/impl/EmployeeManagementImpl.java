@@ -11,8 +11,10 @@ import com.example.personnel_management_system.config.myException.MyException;
 import com.example.personnel_management_system.mapper.EmployeeManagementMapper;
 import com.example.personnel_management_system.pojo.bo.EmployeeManagementBo;
 import com.example.personnel_management_system.pojo.po.EmployeeManagement;
+import com.example.personnel_management_system.pojo.po.SalaryManagement;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.EmployeeManagementService;
+import com.example.personnel_management_system.service.SalaryManagementService;
 import com.example.personnel_management_system.util.FileUtils;
 import com.example.personnel_management_system.util.ResultUtil;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,12 @@ import java.util.Random;
 @Service
 public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper, EmployeeManagement> implements EmployeeManagementService {
 
+    SalaryManagementService salaryManagementService;
+
+    public EmployeeManagementImpl(SalaryManagementService salaryManagementService) {
+        this.salaryManagementService = salaryManagementService;
+    }
+
     @Override
     public ResultVo<Object> addEmployee(EmployeeManagementBo employeeManagementBo) throws IOException {
         EmployeeManagement employee = new EmployeeManagement();
@@ -44,21 +52,23 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
         Long uuid = getUuid();
         employee.setUuid(uuid);
 
-//        employee.setUuid();
-//        if (ObjectUtil.isNotNull(employeeManagementBo.getImage())){
-//            if (StrUtil.isEmpty( employeeManagementBo.getFileName())){
-//                return ResultUtil.error(ResultEnum.FILENAME_IS_EMPTY);
-//            }
-//            String fileName = employeeManagementBo.getFileName();
-//            MultipartFile multipartFile = employeeManagementBo.getImage();
-//            String filepath = FileUtils.getFilepath(fileName);
-//             createFile(filepath,multipartFile);
-//            employee.setEmployeeImageAddress(FileUtils.getUuidAndName(filepath));
-//        }
+
 
         boolean b = save(employee);
         if (b){
-            return ResultUtil.success("添加成功,uuid为："+uuid);
+            QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("uuid",uuid);
+            EmployeeManagement one = getOne(queryWrapper);
+            SalaryManagement salaryManagement = new SalaryManagement();
+            salaryManagement.setEmployeeId(one.getId());
+            boolean save = salaryManagementService.save(salaryManagement);
+            if (save){
+                return ResultUtil.success("添加成功,uuid为："+uuid);
+            }else {
+                return ResultUtil.success("员工添加成功,工资列表添加失败!");
+
+            }
+
         }
         return ResultUtil.error();
     }
