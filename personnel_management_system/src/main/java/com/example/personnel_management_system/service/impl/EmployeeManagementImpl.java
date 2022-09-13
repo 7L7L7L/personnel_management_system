@@ -17,6 +17,7 @@ import com.example.personnel_management_system.service.EmployeeManagementService
 import com.example.personnel_management_system.service.SalaryManagementService;
 import com.example.personnel_management_system.util.FileUtils;
 import com.example.personnel_management_system.util.ResultUtil;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,6 +34,7 @@ import java.util.Random;
  **/
 @Service
 public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper, EmployeeManagement> implements EmployeeManagementService {
+
 
     SalaryManagementService salaryManagementService;
 

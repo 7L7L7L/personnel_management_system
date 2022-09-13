@@ -36,7 +36,6 @@ public class FileUtils {
 
         filepath=filepath.replaceAll(getFileName(filepath),"");
         filepath=filepath.substring(0,filepath.length()-1);
-
         return filepath;
     }
     public static String getFileName(String filepath){
