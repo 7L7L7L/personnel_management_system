@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.personnel_management_system.config.base.ResultEnum;
 import com.example.personnel_management_system.mapper.UserMapper;
+import com.example.personnel_management_system.pojo.bo.UserBo;
 import com.example.personnel_management_system.pojo.po.EmployeeManagement;
 import com.example.personnel_management_system.pojo.po.User;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
@@ -67,17 +68,21 @@ public class UserImpl extends ServiceImpl<UserMapper, User> implements UserServi
     }
 
     @Override
-    public ResultVo<Object> updatePassword(User user) {
+    public ResultVo<Object> updatePassword(UserBo user) {
         if (user.getPassword().length()<6){
             return ResultUtil.error(ResultEnum.PASSWORD_LENGTH_IS_LESS_THEN_SIX);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id",user.getId());
         User one = getOne(queryWrapper);
+        if (!one.getPassword().equals(user.getOldPassword())){
+            return ResultUtil.error(ResultEnum.OLD_PASSWORD_IS_ERROR);
+        }
         if (one.getPassword().equals(user.getPassword())){
             return ResultUtil.error(ResultEnum.PASSWORD_IS_SAME);
         }
-        updateById(user);
+        one.setPassword(user.getPassword());
+        updateById(one);
         return ResultUtil.success();
     }
 

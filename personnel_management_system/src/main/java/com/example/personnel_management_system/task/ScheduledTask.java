@@ -3,10 +3,13 @@ package com.example.personnel_management_system.task;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.personnel_management_system.mapper.HolidayManagementMapper;
 import com.example.personnel_management_system.pojo.po.HolidayManagement;
+import com.example.personnel_management_system.pojo.po.SalaryManagement;
 import com.example.personnel_management_system.service.HolidayManagementService;
+import com.example.personnel_management_system.service.SalaryManagementService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -19,13 +22,18 @@ import java.util.List;
 @Configuration
 public class ScheduledTask {
 
-    HolidayManagementMapper holidayManagementMapper;
-    HolidayManagementService holidayManagementService;
+    private final HolidayManagementMapper holidayManagementMapper;
+    private final HolidayManagementService holidayManagementService;
+    private final SalaryManagementService salaryManagementService;
 
-    public ScheduledTask(HolidayManagementMapper holidayManagementMapper, HolidayManagementService holidayManagementService) {
+    public ScheduledTask(HolidayManagementMapper holidayManagementMapper,
+                         HolidayManagementService holidayManagementService,
+                         SalaryManagementService salaryManagementService) {
         this.holidayManagementMapper = holidayManagementMapper;
         this.holidayManagementService = holidayManagementService;
+        this.salaryManagementService = salaryManagementService;
     }
+
 
     @Scheduled(cron = "0 0/10 * * * ?")
     public void scheduledUpdateHolidayStateForUnAllow(){
@@ -71,5 +79,16 @@ public class ScheduledTask {
 
     }
 
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public void resetSalary(){
+        List<SalaryManagement> list = salaryManagementService.list();
 
+        for (SalaryManagement salaryManagement:list){
+            salaryManagement.setNetSalary(salaryManagement.getBasePay());
+            salaryManagement.setHoliday(BigDecimal.ZERO);
+            salaryManagement.setOvertime(BigDecimal.ZERO);
+            salaryManagementService.updateById(salaryManagement);
+        }
+
+    }
 }

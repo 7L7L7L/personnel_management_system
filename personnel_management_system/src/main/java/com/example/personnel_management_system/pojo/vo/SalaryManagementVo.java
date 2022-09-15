@@ -19,4 +19,5 @@ public class SalaryManagementVo extends SalaryManagement {
     private BigDecimal holiday;
     private BigDecimal overtime;
     private BigDecimal netSalary;
+    private Long uuid;
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface SalaryManagementService extends IService<SalaryManagement> {
 
-    SalaryManagement getOneSalary(Long id);
+    SalaryManagementVo getOneSalary(Long id);
 
     List<SalaryManagementVo> getSalaryList();
 

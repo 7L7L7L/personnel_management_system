@@ -3,7 +3,7 @@ package com.example.personnel_management_system.controller;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.personnel_management_system.config.myException.MyException;
-import com.example.personnel_management_system.pojo.bo.SalaryManagementBo;
+
 import com.example.personnel_management_system.pojo.po.SalaryManagement;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.pojo.vo.SalaryManagementVo;

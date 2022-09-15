@@ -147,7 +147,7 @@ public class HolidayManagementImpl extends ServiceImpl<HolidayManagementMapper, 
         SalaryManagement oneSalary = salaryManagementService.getOneSalary(one.getEmployeeId());
 
         if (!oneSalary.getNetSalary().equals(BigDecimal.ZERO)) {
-            BigDecimal holidayPay = BigDecimal.valueOf(((from - to) / 3600000) * 10);
+            BigDecimal holidayPay = BigDecimal.valueOf(Math.round((((from - to)/3600000))/24)* 100);
             oneSalary.setHoliday(oneSalary.getHoliday().add(holidayPay));
             oneSalary.setNetSalary(oneSalary.getNetSalary().add(holidayPay));
             boolean update = salaryManagementService.updateById(oneSalary);

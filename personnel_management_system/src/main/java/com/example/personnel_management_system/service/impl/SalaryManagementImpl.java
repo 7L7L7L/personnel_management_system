@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.personnel_management_system.config.myException.MyException;
 import com.example.personnel_management_system.mapper.SalaryManagementMapper;
-import com.example.personnel_management_system.pojo.bo.SalaryManagementBo;
+
 import com.example.personnel_management_system.pojo.po.EmployeeManagement;
 import com.example.personnel_management_system.pojo.po.SalaryManagement;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
@@ -16,9 +16,8 @@ import com.example.personnel_management_system.service.SalaryManagementService;
 import com.example.personnel_management_system.util.FileUtils;
 import com.example.personnel_management_system.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,17 +60,25 @@ public class SalaryManagementImpl extends ServiceImpl<SalaryManagementMapper, Sa
             queryWrapper.eq("id",salaryManagement.getEmployeeId());
             EmployeeManagement employee = employeeManagementService.getOne(queryWrapper);
             salaryManagementVo.setEmployeeName(employee.getEmployeeName());
+            salaryManagementVo.setUuid(employee.getUuid());
             salaryManagementVos.add(salaryManagementVo);
         }
         return salaryManagementVos;
     }
 
     @Override
-    public SalaryManagement getOneSalary(Long id) {
+    public SalaryManagementVo getOneSalary(Long id) {
         QueryWrapper<SalaryManagement> salaryManagementQueryWrapper = new QueryWrapper<>();
         salaryManagementQueryWrapper.eq("employee_id",id);
-
-        return getOne(salaryManagementQueryWrapper);
+        SalaryManagement salaryManagement = getOne(salaryManagementQueryWrapper);
+        SalaryManagementVo salaryManagementVo = new SalaryManagementVo();
+        BeanUtils.copyProperties(salaryManagement,salaryManagementVo);
+        QueryWrapper<EmployeeManagement> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id",salaryManagement.getEmployeeId());
+        EmployeeManagement employee = employeeManagementService.getOne(queryWrapper);
+        salaryManagementVo.setEmployeeName(employee.getEmployeeName());
+        salaryManagementVo.setUuid(employee.getUuid());
+        return salaryManagementVo;
     }
 
     @Override
@@ -97,34 +104,43 @@ public class SalaryManagementImpl extends ServiceImpl<SalaryManagementMapper, Sa
         }
         FileOutputStream fileOutputStream = new FileOutputStream(filepath);
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "UTF-8"));
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        sheet.setColumnWidth(0, 3766);
         Row rowName = sheet.createRow(0);
-        rowName.createCell(0).setCellValue("员工姓名");
-        rowName.createCell(1).setCellValue("基本工资");
-        rowName.createCell(2).setCellValue("事病假");
-        rowName.createCell(3).setCellValue("加班工资");
-        rowName.createCell(4).setCellValue("实际工资");
+        rowName.createCell(0).setCellValue("工号");
+        rowName.createCell(1).setCellValue("员工姓名");
+        rowName.createCell(2).setCellValue("基本工资");
+        rowName.createCell(3).setCellValue("事病假");
+        rowName.createCell(4).setCellValue("加班工资");
+        rowName.createCell(5).setCellValue("实际工资");
         int i= 1;
         for (SalaryManagementVo salaryManagementVo:salaryList){
             Row row = sheet.createRow(i);
-            row.createCell(0).setCellValue(salaryManagementVo.getEmployeeName());
-            row.createCell(1).setCellValue(salaryManagementVo.getBasePay().toString());
+            row.createCell(0).setCellValue(salaryManagementVo.getUuid());
+            row.createCell(1).setCellValue(salaryManagementVo.getEmployeeName());
+            row.createCell(2).setCellValue(salaryManagementVo.getBasePay().toString());
             if (ObjectUtil.isNotNull(salaryManagementVo.getHoliday())){
-                row.createCell(2).setCellValue(salaryManagementVo.getHoliday().toString());
-            }else {
-                row.createCell(2).setCellValue("");
-            }
-            if (ObjectUtil.isNotNull(salaryManagementVo.getOvertime())){
-                row.createCell(3).setCellValue(salaryManagementVo.getOvertime().toString());
+                row.createCell(3).setCellValue(salaryManagementVo.getHoliday().toString());
             }else {
                 row.createCell(3).setCellValue("");
             }
-            if (ObjectUtil.isNotNull(salaryManagementVo.getNetSalary())){
-                row.createCell(4).setCellValue(salaryManagementVo.getNetSalary().toString());
+            if (ObjectUtil.isNotNull(salaryManagementVo.getOvertime())){
+                row.createCell(4).setCellValue(salaryManagementVo.getOvertime().toString());
             }else {
                 row.createCell(4).setCellValue("");
             }
+            if (ObjectUtil.isNotNull(salaryManagementVo.getNetSalary())){
+                row.createCell(5).setCellValue(salaryManagementVo.getNetSalary().toString());
+            }else {
+                row.createCell(5).setCellValue("");
+            }
             i++;
         }
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         try {
             workbook.write(fileOutputStream);
         }catch (IOException e){

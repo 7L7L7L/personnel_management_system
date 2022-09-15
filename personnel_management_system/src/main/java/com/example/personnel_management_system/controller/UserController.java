@@ -1,5 +1,6 @@
 package com.example.personnel_management_system.controller;
 
+import com.example.personnel_management_system.pojo.bo.UserBo;
 import com.example.personnel_management_system.pojo.po.User;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.UserService;
@@ -28,8 +29,8 @@ public class UserController {
         return userService.register(user);
     }
     @PostMapping("/updatePassword")
-    public ResultVo<Object> updatePassword(User user){
-        return userService.updatePassword(user);
+    public ResultVo<Object> updatePassword(UserBo userBo){
+        return userService.updatePassword(userBo);
     }
     @PostMapping("/userBind/{id}/{uuid}")
     public ResultVo<Object> userBind(@PathVariable Long id,@PathVariable Long uuid){

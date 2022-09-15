@@ -29,7 +29,9 @@ public enum ResultEnum  {
     IDENTITY_HAS_EXPIRED(800,"身份已过期，请重新登录！"),
     USERNAME_IS_EXIST(900,"用户名已存在"),
     ID_IS_NULL(1300,"id为空"),
-    UUID_IS_ERROR(1500,"uuid错误！请重新输入")
+    UUID_IS_ERROR(1500,"uuid错误！请重新输入"),
+    OLD_PASSWORD_IS_ERROR(1500,"旧密码错误！")
+
     ;
 
 
