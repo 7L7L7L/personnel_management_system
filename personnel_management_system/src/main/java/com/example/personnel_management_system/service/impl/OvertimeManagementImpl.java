@@ -46,7 +46,7 @@ public class OvertimeManagementImpl extends ServiceImpl<OvertimeManagementMapper
     @Override
     public List<OvertimeManagementVo> getOvertimeList() {
         QueryWrapper<OvertimeManagement> overtimeManagementQueryWrapper = new QueryWrapper<>();
-        overtimeManagementQueryWrapper.orderByDesc("employee_id");
+        overtimeManagementQueryWrapper.orderByDesc("is_allow","employee_id");
         List<OvertimeManagement> overtimeManagements = overtimeManagementMapper.selectList(overtimeManagementQueryWrapper);
         List<OvertimeManagementVo> overtimeManagementVos = new ArrayList<>();
         for (OvertimeManagement overtimeManagement:overtimeManagements){
@@ -148,8 +148,8 @@ public class OvertimeManagementImpl extends ServiceImpl<OvertimeManagementMapper
         SalaryManagement oneSalary = salaryManagementService.getOneSalary(one.getEmployeeId());
 
 
-            BigDecimal overtimePay = BigDecimal.valueOf((((to - from)/3600000))* 10);
-            oneSalary.setOvertime(oneSalary.getHoliday().add(overtimePay));
+            BigDecimal overtimePay = BigDecimal.valueOf(Math.round(((to - from)/3600000.0)* 10));
+            oneSalary.setOvertime(oneSalary.getOvertime().add(overtimePay));
             oneSalary.setNetSalary(oneSalary.getNetSalary().add(overtimePay));
             boolean update = salaryManagementService.updateById(oneSalary);
             boolean b = updateById(one);

@@ -52,7 +52,7 @@ public class HolidayManagementImpl extends ServiceImpl<HolidayManagementMapper, 
     @Override
     public List<HolidayManagementVo> getHolidayList() {
         QueryWrapper<HolidayManagement> holidayManagementQueryWrapper = new QueryWrapper<>();
-        holidayManagementQueryWrapper.orderByDesc("employee_id");
+        holidayManagementQueryWrapper.orderByDesc("is_allow","employee_id");
         List<HolidayManagement> holidayManagements = holidayManagementMapper.selectList(holidayManagementQueryWrapper);
         List<HolidayManagementVo> holidayManagementVos = new ArrayList<>();
         for (HolidayManagement holidayManagement:holidayManagements){
@@ -147,7 +147,7 @@ public class HolidayManagementImpl extends ServiceImpl<HolidayManagementMapper, 
         SalaryManagement oneSalary = salaryManagementService.getOneSalary(one.getEmployeeId());
 
         if (!oneSalary.getNetSalary().equals(BigDecimal.ZERO)) {
-            BigDecimal holidayPay = BigDecimal.valueOf(Math.round((((from - to)/3600000))/24)* 100);
+            BigDecimal holidayPay = BigDecimal.valueOf(Math.round((((from - to)/3600000.0))/24* 100));
             oneSalary.setHoliday(oneSalary.getHoliday().add(holidayPay));
             oneSalary.setNetSalary(oneSalary.getNetSalary().add(holidayPay));
             boolean update = salaryManagementService.updateById(oneSalary);
