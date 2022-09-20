@@ -11,12 +11,17 @@ import com.example.personnel_management_system.config.myException.MyException;
 import com.example.personnel_management_system.mapper.EmployeeManagementMapper;
 import com.example.personnel_management_system.pojo.bo.EmployeeManagementBo;
 import com.example.personnel_management_system.pojo.po.EmployeeManagement;
+import com.example.personnel_management_system.pojo.po.HolidayManagement;
+import com.example.personnel_management_system.pojo.po.OvertimeManagement;
 import com.example.personnel_management_system.pojo.po.SalaryManagement;
 import com.example.personnel_management_system.pojo.vo.ResultVo;
 import com.example.personnel_management_system.service.EmployeeManagementService;
+import com.example.personnel_management_system.service.HolidayManagementService;
+import com.example.personnel_management_system.service.OvertimeManagementService;
 import com.example.personnel_management_system.service.SalaryManagementService;
 import com.example.personnel_management_system.util.FileUtils;
 import com.example.personnel_management_system.util.ResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,11 +41,14 @@ import java.util.Random;
 public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper, EmployeeManagement> implements EmployeeManagementService {
 
 
+    @Autowired
     SalaryManagementService salaryManagementService;
-
-    public EmployeeManagementImpl(SalaryManagementService salaryManagementService) {
-        this.salaryManagementService = salaryManagementService;
-    }
+    @Lazy
+    @Autowired
+    OvertimeManagementService overtimeManagementService;
+    @Lazy
+    @Autowired
+    HolidayManagementService holidayManagementService;
 
     @Override
     public ResultVo<Object> addEmployee(EmployeeManagementBo employeeManagementBo) throws IOException {
@@ -80,8 +88,20 @@ public class EmployeeManagementImpl extends ServiceImpl<EmployeeManagementMapper
 
     @Override
     public ResultVo<Object> deleteEmployee(Long id) {
+
+
+        QueryWrapper<SalaryManagement> salaryManagementQueryWrapper = new QueryWrapper<>();
+        salaryManagementQueryWrapper.eq("employee_id",id);
+        QueryWrapper<HolidayManagement> holidayManagementQueryWrapper = new QueryWrapper<>();
+        QueryWrapper<OvertimeManagement> overtimeManagementQueryWrapper = new QueryWrapper<>();
+        holidayManagementQueryWrapper.eq("employee_id",id);
+        overtimeManagementQueryWrapper.eq("employee_id",id);
+        boolean rs = salaryManagementService.remove(salaryManagementQueryWrapper);
+        boolean rh = holidayManagementService.remove(holidayManagementQueryWrapper);
+        boolean ro = overtimeManagementService.remove(overtimeManagementQueryWrapper);
+
         boolean b = removeById(id);
-        if (b){
+        if (b&&rs&&rh&&ro){
             return ResultUtil.success();
         }
         return ResultUtil.error();
